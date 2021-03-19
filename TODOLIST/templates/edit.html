@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}
+    <title> Edit </title>
+{% endblock pagetitle %}
+
+{% block content %}
+    <div class="container">
+        </br>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">New Task Name</label>
+                <input type="text" class="form-control" name="name" aria-describedby="taskHelp" value="{{ task.name }}">
+                <div id="taskHelp" class="form-text">Enter your new task name here.</div>
+            </div>
+            <div class="mb-3 form-check">
+                {% if task.done == False %}
+                    <input type="checkbox" class="form-check-input" name="done" >
+                {% else %}
+                    <input type="checkbox" class="form-check-input" name="done" checked>
+                {% endif %}
+                <label class="form-check-label" for="done">Done</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock content %}

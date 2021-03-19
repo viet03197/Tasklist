@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block pagetitle %}
+    <title>{{ pagetitle }}</title>
+{% endblock pagetitle %}
+
+{% block content %}
+    <div class="container">
+        {% if messages %}
+            {% for m in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ m }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </br>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="name" class="form-label">New Task</label>
+            <input type="text" class="form-control" name="name" aria-describedby="taskHelp">
+            <div id="taskHelp" class="form-text">Enter your new task here.</div>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="done">
+            <label class="form-check-label" for="done">Done</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        </br>
+        <table class="table">
+          <thead>
+            <tr class="table-info">
+              <th scope="col">ID</th>
+              <th scope="col">Task</th>
+              <th scope="col">Status</th>
+              <th scope="col">Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for line in db %}
+                {% if line.done == False %}
+                    <tr class="table-warning">
+                {% else %}
+                    <tr class="table">
+                {% endif %}
+                        <th scope="row"> {{ line.id }}</th>
+                        <td> {{ line.name }}</td>
+                        {% if line.done == True %}
+                            <td> Completed </td>
+                        {% else %}
+                            <td> Not Completed </td>
+                        {% endif %}
+                        <td>
+                            <a class="btn btn-primary" href="{% url 'edit' line.id %}"> Edit </a>
+                            <a class="btn btn-danger" href="{% url 'delete' line.id %}"> Delete </a>
+                        </td>
+                    </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% endblock content %}
