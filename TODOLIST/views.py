@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Task
 from .form import TaskForm
 from django.contrib import messages
+from django.core.paginator import Paginator
 # Create your views here.
 
 def todolist(request):
@@ -14,8 +15,9 @@ def todolist(request):
         return redirect('home')
     else:
         db = Task.objects.all()
-        data = {'title': 'Welcome to the homepage',
-                'pagetitle': 'Homepage'}
+        paginator = Paginator(db, 5)
+        page = request.GET.get('page')
+        db = paginator.get_page(page)
         return render(request, 'home.html', {'db': db})
 
 def delete(request, id):
