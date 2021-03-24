@@ -25,6 +25,19 @@
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </div>
         </div>
+        {% if user.is_authenticated == True %}
+            <div class="form-inline">
+                <span class="navbar-text">
+                  You are logged in as {{ user.username }}
+                </span>
+                <a href="{% url 'logout' %}" type="button" class="btn btn-primary"> Logout </a>
+            </div>
+        {% else %}
+            <div class="form-inline">
+                <a href="{% url 'login' %}" type="button" class="btn btn-primary"> Login </a>
+                <a href="{% url 'register' %}" type="button" class="btn btn-primary"> Register </a>
+            </div>
+        {% endif %}
       </div>
     </nav>
     {% block title %}

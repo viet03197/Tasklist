@@ -4,17 +4,19 @@ from .models import Task
 from .form import TaskForm
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 # Create your views here.
-
+@login_required
 def todolist(request):
     if request.method == "POST":
         form = TaskForm(request.POST or None)
         if form.is_valid():
+            form.save(commit=False).owner = request.user
             form.save()
         messages.success(request, 'New Task Added!')
         return redirect('home')
     else:
-        db = Task.objects.all()
+        db = Task.objects.filter(owner=request.user)
         paginator = Paginator(db, 5)
         page = request.GET.get('page')
         db = paginator.get_page(page)
